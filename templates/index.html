@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KeyGuard | Cryptography Security Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#080e1b;--panel:#111b2e;--panel2:#0d1627;--line:#263752;--text:#edf3ff;--muted:#a1b1ca;--blue:#7eb4ff;--green:#5ee0b2;--red:#ff7885;--amber:#ffd27d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#1d3c63 0,transparent 40%),var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,Segoe UI,Arial,sans-serif}
+.shell{width:min(1200px,94vw);margin:auto;padding:28px 0 50px}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#78b2ff,#9c8cff);color:#091427;font-size:23px;font-weight:900}.brand small,.muted{color:var(--muted)}.brand b{display:block;font-size:1.08rem;letter-spacing:.02em}.labtag{border:1px solid #3a5274;border-radius:999px;padding:7px 12px;color:#bfd8ff;font-size:.78rem;font-weight:800;letter-spacing:.08em}
+.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:20px;align-items:stretch;margin-bottom:20px}.intro,.card{background:linear-gradient(145deg,rgba(18,29,48,.97),rgba(12,21,37,.97));border:1px solid var(--line);border-radius:19px;padding:23px;box-shadow:0 15px 40px #0002}.eyebrow{color:var(--blue);font-weight:900;letter-spacing:.16em;text-transform:uppercase;font-size:.74rem}h1{font-size:clamp(2.2rem,5vw,3.5rem);line-height:1.03;letter-spacing:-.04em;margin:12px 0}h2{font-size:1.12rem;margin:0 0 12px}h3{font-size:.98rem;margin:20px 0 9px}.intro p{max-width:650px;color:var(--muted)}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.chip{font-size:.76rem;border:1px solid #334866;background:#0c1729;padding:6px 9px;border-radius:7px;color:#c8d8f2}
+.scorecard{display:flex;flex-direction:column;justify-content:space-between;gap:18px}.scorehead{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.82rem}.live{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px #5ee0b2}.score{font-size:2.25rem;font-weight:850;letter-spacing:-.04em}.score small{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:0}.meter{height:7px;background:#25344c;border-radius:99px;overflow:hidden}.meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff7885,#ffd27d,#5ee0b2);transition:width .4s}
+.main-grid{display:grid;grid-template-columns: minmax(280px,.78fr) minmax(0,1.5fr);gap:20px}.stack{display:grid;gap:20px;align-content:start}.fieldlabel{display:block;font-size:.85rem;font-weight:800;margin:14px 0 7px}.input,select{width:100%;background:#091426;border:1px solid #334967;color:var(--text);border-radius:10px;padding:12px;font:inherit;outline:none}.input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #7eb4ff20}.hint{font-size:.78rem;color:var(--muted);margin-top:6px}.checks{display:flex;gap:9px;align-items:flex-start;margin:14px 0;color:var(--muted);font-size:.85rem}.checks input{margin-top:5px;accent-color:var(--blue)}.btnrow{display:grid;gap:10px;margin-top:17px}.btn{border:0;border-radius:10px;padding:12px 14px;font:inherit;font-weight:850;cursor:pointer;transition:transform .15s,filter .15s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:wait;transform:none}.primary{background:var(--blue);color:#091427}.secondary{background:#203550;color:#edf3ff;border:1px solid #405b7e}.smallbtn{font-size:.84rem;padding:9px 11px}
+.network{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:15px 0 18px}.node{position:relative;text-align:center;border:1px solid #304561;background:#0a1425;border-radius:14px;padding:16px 8px}.node .symbol{font-size:1.55rem;margin-bottom:5px}.node b{display:block}.node small{color:var(--muted);font-size:.74rem}.node.eve{border-color:#82444f;background:#25151f}.node.eve .symbol{color:var(--red)}.node.alice .symbol,.node.bob .symbol{color:var(--blue)}.network-arrows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;color:var(--muted);font-size:.74rem;text-align:center}.network-arrows span{padding:7px 0;border-top:1px dashed #3d5575}
+.result-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.status{display:inline-block;padding:5px 10px;border-radius:999px;font-size:.75rem;font-weight:950;letter-spacing:.06em}.status.danger{color:#ffdce0;background:#52232d;border:1px solid #a94b5b}.status.success{color:#d1fff0;background:#154736;border:1px solid #348d6e}.status.neutral{color:#d9e8ff;background:#203b60;border:1px solid #416ba0}.timestamp{font-size:.73rem;color:var(--muted);text-align:right}.summary{color:var(--muted);margin:10px 0 16px}.empty{border:1px dashed #3b506e;border-radius:13px;padding:27px;text-align:center;color:var(--muted)}.empty .symbol{font-size:2rem;margin-bottom:8px}
+.timeline{display:grid;gap:0}.event{display:grid;grid-template-columns:42px 1fr;gap:12px;position:relative;padding-bottom:18px}.event:not(:last-child):before{content:"";position:absolute;left:16px;top:34px;bottom:0;border-left:1px solid #344964}.phase{width:34px;height:34px;border-radius:10px;background:#203550;border:1px solid #3a587b;display:grid;place-items:center;font-size:.73rem;font-weight:900;color:#c6ddff;z-index:1}.event.danger .phase{background:#4b202a;border-color:#9e4554;color:#ffdce0}.event.success .phase{background:#164536;border-color:#328567;color:#d2ffef}.event.warning .phase{background:#47371e;border-color:#8a6a30;color:#ffebc1}.event b{display:block;margin:1px 0 3px}.event p{margin:0;color:var(--muted);font-size:.86rem}.actor{display:inline-block;color:#9bb8e4;font-size:.68rem;font-weight:900;letter-spacing:.09em;margin-bottom:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.kpi{background:#0a1425;border:1px solid #263a56;border-radius:12px;padding:13px}.kpi span{display:block;color:var(--muted);font-size:.73rem;min-height:34px}.kpi b{display:block;font-size:1.35rem;margin-top:6px}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.detail{background:#0a1425;border:1px solid #253955;border-radius:10px;padding:11px 12px;min-width:0}.detail span{display:block;color:var(--muted);font-size:.75rem;margin-bottom:5px}.detail b{display:block;overflow-wrap:anywhere;font-size:.86rem}.detail .success{color:var(--green);border:0;background:none;padding:0;font-size:.86rem;letter-spacing:0}.detail .danger{color:var(--red);border:0;background:none;padding:0;font-size:.86rem;letter-spacing:0}.detail .warning{color:var(--amber)}.lesson{border-left:3px solid var(--amber);background:#2b2418;color:#ffe9ba;border-radius:0 10px 10px 0;padding:13px 15px;margin-top:17px;font-size:.87rem}.compare{width:100%;border-collapse:collapse;font-size:.82rem}.compare th,.compare td{padding:10px 8px;border-bottom:1px solid #263752;text-align:left}.compare th{color:var(--muted);font-weight:700}.compare td:last-child,.compare th:last-child{text-align:right}.footer{margin-top:22px;color:#8294af;font-size:.77rem;text-align:center}.hidden{display:none!important}
+@media(max-width:850px){.hero,.main-grid{grid-template-columns:1fr}.scorecard{min-height:180px}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.shell{width:92vw;padding-top:18px}.top{align-items:flex-start}.labtag{display:none}.intro,.card{padding:17px}.detail-grid{grid-template-columns:1fr}.network{gap:5px}.node{padding:12px 4px}.node small{font-size:.65rem}.result-top{display:block}.timestamp{text-align:left;margin-top:8px}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div class="brand"><div class="logo">K</div><div><b>KEYGUARD <span style="color:var(--blue)">LAB</span></b><small>Cryptography · Security Assessment</small></div></div>
+    <div class="labtag">ABA PROJECT / 01</div>
+  </header>
+
+  <section class="hero">
+    <div class="intro">
+      <div class="eyebrow">Session &amp; Key Exchange Weakness</div>
+      <h1>Trust the key.<br><span style="color:var(--blue)">Verify the identity.</span></h1>
+      <p>Explore how an unauthenticated session-key exchange can be intercepted, then test how signature-based authentication detects a man-in-the-middle (MITM) substitution attempt.</p>
+      <div class="chips"><span class="chip">X25519</span><span class="chip">Ed25519</span><span class="chip">HKDF-SHA-256</span><span class="chip">AES-256-GCM</span></div>
+    </div>
+    <div class="intro scorecard">
+      <div class="scorehead"><span>SIMULATION STATUS</span><span class="live"><i class="dot"></i> LOCAL LAB</span></div>
+      <div><div class="score" id="score">READY <small>/ awaiting test</small></div><p id="score-copy" class="muted">Run a scenario to populate the security assessment.</p></div>
+      <div><div class="meter"><span id="meter-fill"></span></div><div class="scorehead" style="margin-top:8px"><span>Authentication confidence (demo indicator)</span><b id="meter-label">—</b></div></div>
+    </div>
+  </section>
+
+  <section class="main-grid">
+    <div class="stack">
+      <section class="card">
+        <h2>Simulation controls</h2>
+        <p class="muted" style="font-size:.86rem;margin-top:-4px">Configure a scenario and inspect the results.</p>
+        <label class="fieldlabel" for="message">Message payload</label>
+        <input id="message" class="input" maxlength="240" value="Transfer 100 credits to Bob" placeholder="Type a sample message">
+        <div class="hint">Local demo only · up to 240 characters</div>
+        <label class="fieldlabel" for="mode">Security scenario</label>
+        <select id="mode">
+          <option value="insecure">Scenario A — Unauthenticated exchange</option>
+          <option value="secure">Scenario B — Authenticated exchange</option>
+        </select>
+        <label class="checks"><input type="checkbox" id="attack" checked><span><b style="color:var(--text)">Enable Eve's substitution attempt</b><br>When selected, Eve presents a replacement public key in the authenticated scenario.</span></label>
+        <div class="btnrow">
+          <button class="btn primary" id="run" onclick="runSimulation()">▶ Run security test</button>
+          <button class="btn secondary" onclick="resetLab()">↺ Reset lab</button>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Protocol map</h2>
+        <p class="muted" style="font-size:.84rem">Participants in the simulated handshake</p>
+        <div class="network">
+          <div class="node alice"><div class="symbol">◉</div><b>Alice</b><small>Initiator</small></div>
+          <div class="node eve"><div class="symbol">⚠</div><b>Eve</b><small>Intermediary</small></div>
+          <div class="node bob"><div class="symbol">◉</div><b>Bob</b><small>Responder</small></div>
+        </div>
+        <div class="network-arrows"><span>Key request ↔</span><span style="color:var(--red)">↔ Possible substitution</span><span>↔ Key response</span></div>
+        <div class="hint">The actors and traffic are simulated in this app. It does not capture or attack real network traffic.</div>
+      </section>
+    </div>
+
+    <div class="stack">
+      <section class="card" id="result-card">
+        <div class="result-top"><div><div class="eyebrow">Security assessment</div><h2 style="margin-top:6px">Test results</h2></div><div class="timestamp" id="timestamp">No test run yet</div></div>
+        <div id="empty" class="empty"><div class="symbol">⌁</div><b>Waiting for simulation</b><div style="font-size:.84rem;margin-top:5px">Choose a scenario and click “Run security test”.</div></div>
+        <div id="output" class="hidden">
+          <span id="status" class="status neutral">READY</span>
+          <p id="summary" class="summary"></p>
+          <div class="kpis">
+            <div class="kpi"><span>Identity verified</span><b id="kpi-auth">—</b></div>
+            <div class="kpi"><span>Attack detected</span><b id="kpi-attack">—</b></div>
+            <div class="kpi"><span>Attacker reads message</span><b id="kpi-secret">—</b></div>
+            <div class="kpi"><span>End-to-end key match</span><b id="kpi-match">—</b></div>
+          </div>
+          <h3>Handshake event log</h3>
+          <div id="timeline" class="timeline"></div>
+          <h3>Cryptographic inspection</h3>
+          <div id="details" class="detail-grid"></div>
+          <div class="lesson"><b>Security takeaway</b><br><span id="lesson"></span></div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Scenario comparison</h2>
+        <table class="compare">
+          <thead><tr><th>Security property</th><th>Insecure</th><th>Authenticated</th></tr></thead>
+          <tbody>
+            <tr><td>Identity check</td><td style="color:var(--red)">Missing</td><td style="color:var(--green)">Signature</td></tr>
+            <tr><td>Key substitution</td><td style="color:var(--red)">Possible</td><td style="color:var(--green)">Detected</td></tr>
+            <tr><td>End-to-end session key</td><td style="color:var(--red)">Not shared</td><td style="color:var(--green)">Matches</td></tr>
+            <tr><td>Message encryption</td><td>AES-GCM per link</td><td>AES-GCM ready</td></tr>
+          </tbody>
+        </table>
+        <p class="hint">The secure mode assumes signing public keys are already trusted. This simplified teaching model is not a replacement for TLS 1.3.</p>
+      </section>
+    </div>
+  </section>
+  <div class="footer">KEYGUARD LAB · Educational simulation · Run locally · Do not expose Flask's development server to the public internet.</div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+function boolText(v){return v ? "YES" : "NO";}
+function stateColor(state){return state==="danger" ? "danger" : state==="success" ? "success" : state==="warning" ? "warning" : "";}
+async function runSimulation(){
+  const btn=$("run");
+  btn.disabled=true;btn.textContent="Running test…";
+  try{
+    const res=await fetch("/api/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode:$("mode").value,message:$("message").value,attack:$("attack").checked})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||"Request failed");
+    $("empty").classList.add("hidden");$("output").classList.remove("hidden");
+    $("timestamp").textContent=data.timestamp;
+    $("status").className="status "+data.status_class;$("status").textContent=data.status;
+    $("summary").textContent=data.summary;$("lesson").textContent=data.lesson;
+    $("score").innerHTML=data.status_class==="success"?'PASS <small>/ security check</small>':'RISK <small>/ security check</small>';
+    $("score-copy").textContent=data.status_class==="success"?"The current scenario rejected the substitution or completed authenticated verification.":"The current scenario demonstrates a key-exchange weakness.";
+    const confidence=data.status_class==="success"?100:20;
+    $("meter-fill").style.width=confidence+"%";$("meter-label").textContent=confidence+"%";
+    const m=data.metrics;
+    $("kpi-auth").textContent=boolText(!!m.identity_verified);
+    $("kpi-attack").textContent=boolText(!!m.attack_detected);
+    $("kpi-secret").textContent=boolText(!!m.confidentiality_to_attacker);
+    $("kpi-match").textContent=boolText(!!m.key_match);
+    ["kpi-auth","kpi-attack","kpi-secret","kpi-match"].forEach(id=>{$(id).style.color=$(id).textContent==="YES"?"var(--green)":"var(--red)";});
+    const timeline=$("timeline");timeline.replaceChildren();
+    data.steps.forEach(s=>{
+      const row=document.createElement("div");row.className="event "+stateColor(s.kind);
+      const phase=document.createElement("div");phase.className="phase";phase.textContent=s.phase;
+      const body=document.createElement("div");const actor=document.createElement("span");actor.className="actor";actor.textContent=s.actor;
+      const title=document.createElement("b");title.textContent=s.name;const p=document.createElement("p");p.textContent=s.detail;
+      body.append(actor,title,p);row.append(phase,body);timeline.append(row);
+    });
+    const details=$("details");details.replaceChildren();
+    data.details.forEach(item=>{
+      const box=document.createElement("div");box.className="detail";
+      const label=document.createElement("span");label.textContent=item.label;
+      const value=document.createElement("b");value.textContent=item.value;value.className=stateColor(item.state);
+      box.append(label,value);details.append(box);
+    });
+    $("result-card").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(err){alert("Could not run the test: "+err.message+"\nCheck that Flask is running in the VS Code terminal.");}
+  finally{btn.disabled=false;btn.textContent="▶ Run security test";}
+}
+function resetLab(){
+  $("message").value="Transfer 100 credits to Bob";$("mode").value="insecure";$("attack").checked=true;
+  $("empty").classList.remove("hidden");$("output").classList.add("hidden");
+  $("timestamp").textContent="No test run yet";$("score").innerHTML='READY <small>/ awaiting test</small>';
+  $("score-copy").textContent="Run a scenario to populate the security assessment.";
+  $("meter-fill").style.width="0";$("meter-label").textContent="—";
+}
+$("mode").addEventListener("change",()=>{const secure=$("mode").value==="secure";$("attack").disabled=!secure;$("attack").parentElement.style.opacity=secure?"1":".55";});
+$("mode").dispatchEvent(new Event("change"));
+</script>
+</body>
+</html>
